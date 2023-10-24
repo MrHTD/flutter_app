@@ -110,53 +110,13 @@ class HomePage extends StatelessWidget {
             cursorColor: Colors.deepOrange,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-          child: TextField(
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide:
-                    const BorderSide(color: Colors.deepOrange, width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: const BorderSide(
-                    width: 2,
-                    color: Colors
-                        .deepOrange), // Change the color to your desired color
-              ),
-              prefixIcon: const Icon(Icons.mail_outline_outlined),
-              prefixIconColor: Colors.deepOrange,
-              hintText: 'Enter Email',
-            ),
-            style: const TextStyle(color: Colors.deepOrange),
-            cursorColor: Colors.deepOrange,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-          child: TextField(
-            decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide:
-                    const BorderSide(color: Colors.deepOrange, width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: const BorderSide(
-                    width: 2,
-                    color: Colors
-                        .deepOrange), // Change the color to your desired color
-              ),
-              prefixIcon: const Icon(Icons.local_phone_outlined),
-              prefixIconColor: Colors.deepOrange,
-              hintText: 'Phone no',
-            ),
-            style: const TextStyle(color: Colors.deepOrange),
-            cursorColor: Colors.deepOrange,
-          ),
+      body: ListView.builder(
+        itemCount: jsonList == [] ? 0 : jsonList.length,
+        shrinkWrap: true,
+        itemBuilder: (context, index) {
+          return MyWidget(object: jsonList[index]);
+        },
+      ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
