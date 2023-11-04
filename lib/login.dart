@@ -1,8 +1,10 @@
 // ignore_for_file: camel_case_types
 
 import 'package:authentication/home.dart';
+import 'package:authentication/main.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './signup.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -26,15 +28,20 @@ class _LoginState extends State<login> {
           .post(Uri.parse(url), body: {'email': email, 'password': password});
 
       var response = json.decode(res.body.toString());
-      if (response == "Success") {
+      if (response["Success"] == "true") {
         Fluttertoast.showToast(
           msg: "Login Successful",
           toastLength: Toast.LENGTH_LONG,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.greenAccent,
+          backgroundColor: Colors.green,
           textColor: Colors.white,
           fontSize: 16.0,
         );
+        print("Success");
+        // print(response["uemail"]);
+        final SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+        sharedPreferences.setString('email', response["uemail"]);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => Home()));
       } else {
@@ -67,8 +74,7 @@ class _LoginState extends State<login> {
                 borderRadius: BorderRadius.circular(200),
               ),
               child: Center(
-                child: Image.network(
-                    'https://icons-for-free.com/iconfiles/png/512/login-1329545823141024311.png'),
+                child: Image.asset('assets/images/login.png'),
               ),
             ),
             const SizedBox(height: 20),
@@ -81,57 +87,86 @@ class _LoginState extends State<login> {
               "Login to your account",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
+            const SizedBox(height: 10),
             //field1
-            const SizedBox(height: 60),
-            TextFormField(
-              controller: emailcontroller,
-              keyboardType: TextInputType.name,
-              decoration: InputDecoration(
-                labelText: "Email",
-                prefixIcon: const Icon(
-                  Icons.email_outlined,
-                  color: Color.fromARGB(255, 13, 71, 161),
-                ),
-                border: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(width: 2, color: Colors.blueAccent),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: Colors.blue.shade900),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(width: 2, color: Colors.blueAccent),
-                  borderRadius: BorderRadius.circular(20),
+            Container(
+              decoration: const BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black38,
+                    blurRadius: 25,
+                    offset: Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: TextFormField(
+                controller: emailcontroller,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  prefixIcon: const Icon(
+                    Icons.email_outlined,
+                    color: Color.fromARGB(255, 13, 71, 161),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 2, color: Colors.blueAccent),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(width: 2, color: Colors.blue.shade900),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 2, color: Colors.blueAccent),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
               ),
             ),
+
             //field2
             const SizedBox(height: 10),
-            TextFormField(
-              controller: passwordcontroller,
-              keyboardType: TextInputType.visiblePassword,
-              decoration: InputDecoration(
-                labelText: "Password",
-                prefixIcon: const Icon(
-                  Icons.fingerprint_outlined,
-                  color: Color.fromARGB(255, 13, 71, 161),
-                ),
-                border: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(width: 2, color: Colors.blueAccent),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(width: 2, color: Colors.blue.shade900),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      const BorderSide(width: 2, color: Colors.blueAccent),
-                  borderRadius: BorderRadius.circular(20),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black38,
+                    blurRadius: 25,
+                    offset: const Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: TextFormField(
+                controller: passwordcontroller,
+                keyboardType: TextInputType.visiblePassword,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  prefixIcon: const Icon(
+                    Icons.fingerprint_outlined,
+                    color: Color.fromARGB(255, 13, 71, 161),
+                  ),
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 2, color: Colors.blueAccent),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(width: 2, color: Colors.blue.shade900),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        const BorderSide(width: 2, color: Colors.blueAccent),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
               ),
             ),
@@ -139,7 +174,9 @@ class _LoginState extends State<login> {
             const SizedBox(height: 60),
             Column(children: [
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  var sharedpref = await SharedPreferences.getInstance();
+                  sharedpref.setBool(SplashPageState.KEYLOGIN, true);
                   login(emailcontroller.text.toString(),
                       passwordcontroller.text.toString());
                 },
